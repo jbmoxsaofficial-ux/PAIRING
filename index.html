@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>REXMANT'X15 - PAIRING FLOOD</title>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            padding: 25px;
+            background: #0f0f0f;
+        }
+        h1 { text-align: center; color: #ff4444; }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #1a1a1a;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            cursor: pointer;
+            font-weight: bold;
+            background: #2a2a2a;
+        }
+        button:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+        }
+        .log {
+            background: #050505;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            font-size: 12px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .success { color: #00ff41; }
+        .error { color: #ff4444; }
+        hr { border-color: #00ff41; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🔥 REXMANT'X15 🔥</h1>
+    <h3 style="text-align:center;">WHATSAPP PAIRING FLOOD</h3>
+    <hr>
+    
+    <label>📱 NOMOR TARGET:</label>
+    <input type="text" id="phone" placeholder="628123456789">
+    
+    <label>⚡ JUMLAH SESI (1-10):</label>
+    <input type="number" id="sessions" value="5" min="1" max="10">
+    
+    <button id="startBtn">💣 START PAIRING SPAM 💣</button>
+    <button id="floodBtn">🌊 PAIRING FLOOD (100x request)</button>
+    
+    <div class="log" id="log">
+        <div>[READY] REXMANT'X15 siap. Masukkan nomor target.</div>
+    </div>
+</div>
+
+<script>
+    function addLog(msg, isError = false) {
+        const logDiv = document.getElementById('log');
+        const div = document.createElement('div');
+        div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        div.style.color = isError ? '#ff4444' : '#00ff41';
+        logDiv.appendChild(div);
+        div.scrollIntoView();
+    }
+    
+    document.getElementById('startBtn').onclick = async () => {
+        const phone = document.getElementById('phone').value;
+        const sessions = document.getElementById('sessions').value;
+        
+        if (!phone) {
+            addLog('MASUKKAN NOMOR TARGET DULU BANGSAT!', true);
+            return;
+        }
+        
+        addLog(`🔥 Memulai PAIRING SPAM ke ${phone} dengan ${sessions} sesi...`);
+        
+        try {
+            const res = await fetch('/api/spam-pairing', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone, sessions: parseInt(sessions) })
+            });
+            const data = await res.json();
+            if (data.success) {
+                addLog(`✅ PAIRING SPAM BERHASIL DIMULAI! Efek akan terasa 5-10 menit.`);
+                addLog(`💀 Nomor target bakal kena flood pairing code → kemungkinan besar KENA BANNED SEMENTARA.`);
+            } else {
+                addLog(`❌ GAGAL: ${data.error}`, true);
+            }
+        } catch(e) {
+            addLog(`ERROR: ${e.message}`, true);
+        }
+    };
+    
+    document.getElementById('floodBtn').onclick = async () => {
+        const phone = document.getElementById('phone').value;
+        if (!phone) {
+            addLog('MASUKKAN NOMOR TARGET DULU!', true);
+            return;
+        }
+        
+        addLog(`🌊 Memulai PAIRING FLOOD 100x ke ${phone}...`);
+        
+        try {
+            const res = await fetch('/api/pairing-flood', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone })
+            });
+            const data = await res.json();
+            if (data.success) {
+                addLog(`✅ FLOOD SELESAI! ${data.results.length} request terkirim.`);
+                addLog(`📊 Hasil: ${data.results.slice(0,5).join(', ')}...`);
+            }
+        } catch(e) {
+            addLog(`ERROR: ${e.message}`, true);
+        }
+    };
+</script>
+</body>
+</html>
